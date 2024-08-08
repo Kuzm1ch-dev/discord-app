@@ -4,10 +4,10 @@ import {defineConfig} from 'vite';
 export default defineConfig({
   envDir: '../../',
   server: {
-    port: 3000,
+    port: 80,
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:81',
         changeOrigin: true,
         secure: false,
         ws: true,
