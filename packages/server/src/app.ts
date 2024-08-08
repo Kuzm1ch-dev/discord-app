@@ -22,6 +22,7 @@ app.post('/api/token', async (req: Request, res: Response) => {
     grant_type: 'authorization_code',
     code: req.body.code,
   });
+  console.log(req.body)
   console.log(req.body.code)
   console.log(body);
   const response = await fetchAndRetry(`https://discord.com/api/oauth2/token`, {
