@@ -16,17 +16,20 @@ if (process.env.NODE_ENV === 'production') {
 
 // Fetch token from developer portal and return to the embedded app
 app.post('/api/token', async (req: Request, res: Response) => {
+  let body = new URLSearchParams({
+    client_id: process.env.VITE_CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
+    grant_type: 'authorization_code',
+    code: req.body.code,
+  });
+  console.log(req.body.code)
+  console.log(body);
   const response = await fetchAndRetry(`https://discord.com/api/oauth2/token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: new URLSearchParams({
-      client_id: process.env.VITE_CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
-      grant_type: 'authorization_code',
-      code: req.body.code,
-    }),
+    body: body,
   });
 
   const {access_token} = (await response.json()) as {
