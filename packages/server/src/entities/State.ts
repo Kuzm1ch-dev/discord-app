@@ -30,11 +30,11 @@ export class State extends Schema {
   }
 
   createPlayer(sessionId: string, playerOptions: TPlayerOptions) {
-    console.log(playerOptions);
     const existingPlayer = Array.from(this.players.values()).find((p) => p.sessionId === sessionId);
     if (existingPlayer == null) {
       this.players.set(playerOptions.userId, new Player({...playerOptions, sessionId}));
     }
+    console.log(this.players.keys())
   }
 
   removePlayer(sessionId: string) {
