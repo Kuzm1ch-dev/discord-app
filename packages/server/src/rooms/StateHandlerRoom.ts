@@ -27,6 +27,7 @@ export class StateHandlerRoom extends Room<State> {
   onJoin(client: Client, options: TPlayerOptions) {
     console.log("onJoin")
     console.log(client)
+    console.log(typeof client.sessionId)
     this.state.createPlayer(client.sessionId, options);
   }
 
