@@ -35,7 +35,6 @@ export class StateHandlerRoom extends Room<State> {
   }
 
   onDispose() {
-    console.log("onDispose")
     console.log('Dispose StateHandlerRoom');
   }
 }
