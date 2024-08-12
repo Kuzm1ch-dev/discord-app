@@ -11,13 +11,13 @@ export class State extends Schema {
   @type({map: Player})
   players = new MapSchema<Player>();
 
-  @type('number')
-  public stage: number;
-  /*
+    /*
     0 - Ожидание игроков
     1 - Игра идет
     2 - Игра завершена
   */
+  @type('number')
+  public stage: number;
 
   @type('string')
   public roomName: string;
