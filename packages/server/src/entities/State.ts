@@ -91,4 +91,12 @@ export class State extends Schema {
       player.ready = true;
     }
   }
+
+  unready( sessionId: string){
+    const player = this._getPlayer(sessionId);
+    if (player != null) {
+      player.ready = false;
+    }
+  }
+
 }

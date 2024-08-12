@@ -20,7 +20,12 @@ export class StateHandlerRoom extends Room<State> {
     });
 
     this.onMessage('ready', (client, _data) => {
-      console.log("ready")
+      console.log("ready ", client.sessionId)
+      this.state.ready(client.sessionId);
+    });
+
+    this.onMessage('unready', (client, _data) => {
+      console.log("unready ", client.sessionId)
       this.state.ready(client.sessionId);
     });
   }
