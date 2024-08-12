@@ -10,6 +10,14 @@ export class State extends Schema {
   @type({map: Player})
   players = new MapSchema<Player>();
 
+  @type('number')
+  public state: number;
+  /*
+    0 - Ожидание игроков
+    1 - Игра идет
+    2 - Игра завершена
+  */
+
   @type('string')
   public roomName: string;
 
@@ -23,6 +31,7 @@ export class State extends Schema {
     super();
     this.roomName = attributes.roomName;
     this.channelId = attributes.channelId;
+    this.state = 0;
   }
 
   private _getPlayer(sessionId: string): Player | undefined {
@@ -30,17 +39,27 @@ export class State extends Schema {
   }
 
   createPlayer(sessionId: string, playerOptions: TPlayerOptions) {
+    if (Object.keys(this.players).length === 0){
+      playerOptions.master = true
+    }
     const existingPlayer = Array.from(this.players.values()).find((p) => p.sessionId === sessionId);
     if (existingPlayer == null) {
       this.players.set(playerOptions.userId, new Player({...playerOptions, sessionId}));
     }
-    console.log(this.players.keys())
   }
 
   removePlayer(sessionId: string) {
     const player = Array.from(this.players.values()).find((p) => p.sessionId === sessionId);
     if (player != null) {
       this.players.delete(player.userId);
+      if (player.master){
+        if (Object.keys(this.players).length > 0){
+          var newMaster = this.players.get(Object.keys(this.players)[0])
+          if (newMaster){
+            newMaster.master = true
+          }
+        }
+      }
     }
   }
 
@@ -55,6 +74,13 @@ export class State extends Schema {
     const player = this._getPlayer(sessionId);
     if (player != null) {
       player.talking = false;
+    }
+  }
+
+  ready( sessionId: string){
+    const player = this._getPlayer(sessionId);
+    if (player != null) {
+      player.ready = true;
     }
   }
 }

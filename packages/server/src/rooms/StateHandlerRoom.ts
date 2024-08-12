@@ -18,6 +18,11 @@ export class StateHandlerRoom extends Room<State> {
       console.log("stopTalking")
       this.state.stopTalking(client.sessionId);
     });
+
+    this.onMessage('ready', (client, _data) => {
+      console.log("ready")
+      this.state.ready(client.sessionId);
+    });
   }
 
   onAuth(_client: any, _options: any, _req: any) {
