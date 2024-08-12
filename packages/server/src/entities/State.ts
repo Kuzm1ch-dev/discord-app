@@ -39,7 +39,7 @@ export class State extends Schema {
   }
 
   createPlayer(sessionId: string, playerOptions: TPlayerOptions) {
-    if (Object.keys(this.players).length === 0){
+    if (Object.keys(this.players).length == 0){
       console.log("This is master", sessionId)
       playerOptions.master = true
     }
