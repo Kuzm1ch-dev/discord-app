@@ -99,4 +99,11 @@ export class State extends Schema {
     }
   }
 
+  start( sessionId: string){
+    const player = this._getPlayer(sessionId);
+    if (player != null && player.master) {
+      this.state = 1
+    }
+  }
+
 }

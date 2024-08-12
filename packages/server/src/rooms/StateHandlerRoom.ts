@@ -28,6 +28,11 @@ export class StateHandlerRoom extends Room<State> {
       console.log("unready ", client.sessionId)
       this.state.unready(client.sessionId);
     });
+
+    this.onMessage('start', (client, _data) => {
+      console.log("start ", client.sessionId)
+      this.state.start(client.sessionId);
+    });
   }
 
   onAuth(_client: any, _options: any, _req: any) {
