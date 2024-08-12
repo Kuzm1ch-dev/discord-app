@@ -11,7 +11,7 @@ export class State extends Schema {
   @type({map: Player})
   players = new MapSchema<Player>();
 
-    /*
+  /*
     0 - Ожидание игроков
     1 - Игра идет
     2 - Игра завершена
