@@ -1,6 +1,6 @@
 import {Schema, type} from '@colyseus/schema';
 
-export type TPlayerOptions = Pick<Player, 'sessionId' | 'userId' | 'name' | 'avatarUri' | 'talking' | 'ready' | 'master' | 'alive' | 'state'>;
+export type TPlayerOptions = Pick<Player, 'sessionId' | 'userId' | 'name' | 'avatarUri' | 'talking' | 'ready' | 'master' | 'alive' | 'mode'>;
 
 export class Player extends Schema {
   @type('string')
@@ -28,7 +28,7 @@ export class Player extends Schema {
   public alive: boolean = true;
 
   @type('number')
-  public state: number = 1;
+  public mode: number = 1;
 
   // Init
   constructor({name, userId, avatarUri, sessionId}: TPlayerOptions) {

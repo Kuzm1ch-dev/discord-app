@@ -40,7 +40,7 @@ export class State extends Schema {
   }
 
   private _getPlayersCount(): number{
-    return Array.from(this.players.values()).filter((p) => p.state == 1).length
+    return Array.from(this.players.values()).filter((p) => p.mode == 1).length
   }
 
   createPlayer(sessionId: string, playerOptions: TPlayerOptions) {
@@ -62,7 +62,7 @@ export class State extends Schema {
         }
         if(this.state > 0){
           player.alive = false
-          player.state = 0
+          player.mode = 0
         }
       }
     }
@@ -116,7 +116,7 @@ export class State extends Schema {
   spectate( sessionId: string){
     const player = this._getPlayer(sessionId);
     if (player != null) {
-      player.state = 0;
+      player.mode = 0;
       player.alive = false;
       player.ready = false;
     }
@@ -125,7 +125,7 @@ export class State extends Schema {
 
   start( sessionId: string){
     const player = this._getPlayer(sessionId);
-    const allPlayersReady = Array.from(this.players.values()).filter((p) => p.ready == true && p.state == 1).length  == Array.from(this.players.values()).filter((p) => p.state == 1).length
+    const allPlayersReady = Array.from(this.players.values()).filter((p) => p.ready == true && p.mode == 1).length  == this._getPlayersCount()
     if (player != null && player.master && allPlayersReady) {
       this.state = 1
     }
