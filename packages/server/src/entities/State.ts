@@ -1,4 +1,5 @@
 import {Schema, MapSchema, type} from '@colyseus/schema';
+import { boolean } from '@colyseus/schema/lib/encoding/decode';
 import {TPlayerOptions, Player} from './Player';
 
 export interface IState {
@@ -38,12 +39,16 @@ export class State extends Schema {
     return Array.from(this.players.values()).find((p) => p.sessionId === sessionId);
   }
 
+  private _getPlayersCount(): number{
+    return Array.from(this.players.values()).filter((p) => p.state == 1).length
+  }
+
   createPlayer(sessionId: string, playerOptions: TPlayerOptions) {
     console.log("createPlayer");
     var master = false;
-    console.log(this.players.size);
+    console.log(this._getPlayersCount());
 
-    if (this.players.size == 0){
+    if (this._getPlayersCount() == 0){
       console.log("This is master", sessionId)
       master = true
     }
@@ -57,6 +62,7 @@ export class State extends Schema {
         }
         if(this.state > 0){
           player.alive = false
+          player.state = 0
         }
       }
     }
@@ -67,7 +73,7 @@ export class State extends Schema {
     if (player != null) {
       this.players.delete(player.userId);
       if (player.master){
-        if (this.players.size > 0){
+        if (this._getPlayersCount() > 0){
           console.log(this.players.keys().next().value)
           var newMaster = this.players.get(this.players.keys().next().value)
           if (newMaster){
@@ -107,9 +113,20 @@ export class State extends Schema {
     }
   }
 
+  spectate( sessionId: string){
+    const player = this._getPlayer(sessionId);
+    if (player != null) {
+      player.state = 0;
+      player.alive = false;
+      player.ready = false;
+    }
+  }
+
+
   start( sessionId: string){
     const player = this._getPlayer(sessionId);
-    if (player != null && player.master) {
+    const allPlayersReady = Array.from(this.players.values()).filter((p) => p.ready == true && p.state == 1).length  == Array.from(this.players.values()).filter((p) => p.state == 1).length
+    if (player != null && player.master && allPlayersReady) {
       this.state = 1
     }
   }
