@@ -126,6 +126,15 @@ export class State extends Schema {
     }
   }
 
+  play( sessionId: string){
+    const player = this._getPlayer(sessionId);
+    if (player != null) {
+      player.mode = 1;
+      if (this.state > 0) player.alive = false;
+      player.ready = false;
+    }
+  }
+
   start( sessionId: string){
     const player = this._getPlayer(sessionId);
     const allPlayersReady = Array.from(this.players.values()).filter((p) => p.ready == true && p.mode == 1).length  == this._getPlayersCount()
