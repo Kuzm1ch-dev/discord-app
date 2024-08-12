@@ -140,6 +140,7 @@ export class State extends Schema {
     const allPlayersReady = Array.from(this.players.values()).filter((p) => p.ready == true && p.mode == 1).length  == this._getPlayersCount()
     if (player != null && player.master && allPlayersReady) {
       this.stage = 1
+      console.log(this.stage)
     }
   }
 
