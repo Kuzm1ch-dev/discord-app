@@ -43,6 +43,17 @@ export class State extends Schema {
     return Array.from(this.players.values()).filter((p) => p.mode == 1).length
   }
 
+  private _changeMaster(){
+    if (this._getPlayersCount() > 0){
+      var newMaster = this.players.get(this.players.keys().next().value)
+      if (newMaster){
+        newMaster.master = true
+        newMaster.ready = true
+        newMaster.mode = 1
+      }
+    }
+  }
+
   createPlayer(sessionId: string, playerOptions: TPlayerOptions) {
     console.log("createPlayer");
     var master = false;
@@ -73,14 +84,7 @@ export class State extends Schema {
     if (player != null) {
       this.players.delete(player.userId);
       if (player.master){
-        if (this._getPlayersCount() > 0){
-          console.log(this.players.keys().next().value)
-          var newMaster = this.players.get(this.players.keys().next().value)
-          if (newMaster){
-            newMaster.master = true
-            newMaster.ready = true
-          }
-        }
+        this._changeMaster()
       }
     }
   }
