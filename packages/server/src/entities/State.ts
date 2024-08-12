@@ -40,9 +40,17 @@ export class State extends Schema {
 
   createPlayer(sessionId: string, playerOptions: TPlayerOptions) {
     console.log("createPlayer");
+    var master = false;
+    if (Object.keys(this.players.values()).length == 0){
+      console.log("This is master", sessionId)
+      master = true
+    }
     const existingPlayer = Array.from(this.players.values()).find((p) => p.sessionId === sessionId);
     if (existingPlayer == null) {
-      this.players.set(playerOptions.userId, new Player({...playerOptions, sessionId}));
+      var player = this.players.set(playerOptions.userId, new Player({...playerOptions, sessionId})).get(playerOptions.userId);
+      if(master && player){
+        player.master = true
+      }
     }
   }
 
