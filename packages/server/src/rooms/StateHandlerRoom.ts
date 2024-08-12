@@ -31,6 +31,10 @@ export class StateHandlerRoom extends Room<State> {
 
   onJoin(client: Client, options: TPlayerOptions) {
     console.log("onJoin")
+    if (Object.keys(this.state.players.values()).length == 0){
+      console.log("This is master", client.sessionId)
+      options.master = true
+    }
     this.state.createPlayer(client.sessionId, options);
   }
 
