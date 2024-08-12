@@ -34,7 +34,7 @@ export class StateHandlerRoom extends Room<State> {
       this.state.start(client.sessionId);
     });
 
-    this.onMessage('spectate', (client, _data) => {
+    this.onMessage("spectate", (client, _data) => {
       console.log("spectate ", client.sessionId)
       this.state.spectate(client.sessionId);
     });
