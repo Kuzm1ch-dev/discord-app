@@ -33,6 +33,11 @@ export class StateHandlerRoom extends Room<State> {
       console.log("start ", client.sessionId)
       this.state.start(client.sessionId);
     });
+
+    this.onMessage('spectate', (client, _data) => {
+      console.log("spectate ", client.sessionId)
+      this.state.spectate(client.sessionId);
+    });
   }
 
   onAuth(_client: any, _options: any, _req: any) {
