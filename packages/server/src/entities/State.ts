@@ -12,7 +12,7 @@ export class State extends Schema {
   players = new MapSchema<Player>();
 
   @type('number')
-  public state: number;
+  public stage: number;
   /*
     0 - Ожидание игроков
     1 - Игра идет
@@ -32,7 +32,7 @@ export class State extends Schema {
     super();
     this.roomName = attributes.roomName;
     this.channelId = attributes.channelId;
-    this.state = 0;
+    this.stage = 0;
   }
 
   private _getPlayer(sessionId: string): Player | undefined {
@@ -71,7 +71,7 @@ export class State extends Schema {
           player.master = true
           player.ready = true
         }
-        if(this.state > 0){
+        if(this.stage > 0){
           player.alive = false
           player.mode = 0
         }
@@ -130,7 +130,7 @@ export class State extends Schema {
     const player = this._getPlayer(sessionId);
     if (player != null) {
       player.mode = 1;
-      if (this.state > 0) player.alive = false;
+      if (this.stage > 0) player.alive = false;
       player.ready = false;
     }
   }
@@ -139,7 +139,7 @@ export class State extends Schema {
     const player = this._getPlayer(sessionId);
     const allPlayersReady = Array.from(this.players.values()).filter((p) => p.ready == true && p.mode == 1).length  == this._getPlayersCount()
     if (player != null && player.master && allPlayersReady) {
-      this.state = 1
+      this.stage = 1
     }
   }
 
