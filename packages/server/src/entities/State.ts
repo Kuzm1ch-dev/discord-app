@@ -61,8 +61,8 @@ export class State extends Schema {
     if (player != null) {
       this.players.delete(player.userId);
       if (player.master){
-        if (Object.keys(this.players).length > 0){
-          var newMaster = this.players.get(Object.keys(this.players)[0])
+        if (this.players.size > 0){
+          var newMaster = this.players.get(this.players.keys().next().value)
           if (newMaster){
             newMaster.master = true
           }
