@@ -42,6 +42,7 @@ export class State extends Schema {
     console.log("createPlayer");
     var master = false;
     console.log(this.players.size);
+
     if (this.players.size == 0){
       console.log("This is master", sessionId)
       master = true
@@ -49,9 +50,14 @@ export class State extends Schema {
     const existingPlayer = Array.from(this.players.values()).find((p) => p.sessionId === sessionId);
     if (existingPlayer == null) {
       var player = this.players.set(playerOptions.userId, new Player({...playerOptions, sessionId})).get(playerOptions.userId);
-      if(master && player){
-        player.master = true
-        player.ready = true
+      if(player){
+        if(master){
+          player.master = true
+          player.ready = true
+        }
+        if(this.state > 0){
+          player.alive = false
+        }
       }
     }
   }
@@ -66,6 +72,7 @@ export class State extends Schema {
           var newMaster = this.players.get(this.players.keys().next().value)
           if (newMaster){
             newMaster.master = true
+            newMaster.ready = true
           }
         }
       }
