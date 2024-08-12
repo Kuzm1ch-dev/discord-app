@@ -50,6 +50,7 @@ export class State extends Schema {
       var player = this.players.set(playerOptions.userId, new Player({...playerOptions, sessionId})).get(playerOptions.userId);
       if(master && player){
         player.master = true
+        player.ready = true
       }
     }
   }
