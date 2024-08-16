@@ -1,6 +1,8 @@
 import {Schema, MapSchema, type} from '@colyseus/schema';
 import { boolean } from '@colyseus/schema/lib/encoding/decode';
+import { throws } from 'assert';
 import {TPlayerOptions, Player} from './Player';
+import {Queue} from "./Queue";
 
 export interface IState {
   roomName: string;
@@ -19,6 +21,9 @@ export class State extends Schema {
   @type('number')
   public stage: number;
 
+  @type('number')
+  public round: number = 0;
+
   @type('string')
   public roomName: string;
 
@@ -26,6 +31,7 @@ export class State extends Schema {
   public channelId: string;
 
   serverAttribute = 'this attribute wont be sent to the client-side';
+  queue: Queue = new Queue([]);
 
   // Init
   constructor(attributes: IState) {
@@ -58,7 +64,6 @@ export class State extends Schema {
     console.log("createPlayer");
     var master = false;
     console.log(this._getPlayersCount());
-
     if (this._getPlayersCount() == 0){
       console.log("This is master", sessionId)
       master = true
@@ -117,30 +122,63 @@ export class State extends Schema {
     }
   }
 
-  spectate( sessionId: string){
+  spectate( sessionId: string): boolean{
     const player = this._getPlayer(sessionId);
     if (player != null) {
       player.mode = 0;
       player.alive = false;
       player.ready = false;
+      return true;
     }
+    return false;
   }
 
-  play( sessionId: string){
+  play( sessionId: string): boolean{
     const player = this._getPlayer(sessionId);
     if (player != null) {
       player.mode = 1;
       if (this.stage > 0) player.alive = false;
       player.ready = false;
+      return true;
     }
+    return false;
   }
 
-  start( sessionId: string){
+  start( sessionId: string): boolean{
     const player = this._getPlayer(sessionId);
     const allPlayersReady = Array.from(this.players.values()).filter((p) => p.ready == true && p.mode == 1).length  == this._getPlayersCount()
     if (player != null && player.master && allPlayersReady) {
       this.stage = 1
+      this.newRound();
+      return true
     }
+    return false
   }
 
+  next(): string | boolean{
+    var player = this.queue.next()
+    if (player.done){
+      return player.value;
+    }
+    return false
+  }
+
+  newRound(){
+    this.round += 1;
+    this.queue = new Queue(Array.from(this.players.keys()).filter((k) => this.players.get(k)?.alive && this.players.get(k)?.mode == 1));
+  }
+
+  shot(): boolean {
+    var min = 1
+    var max = 6
+    return (Math.random() * (max - min) + min) == min;
+  }
+
+  kill( userId: string) {
+    const player = this.players.get(userId)
+    if (player != null) {
+      player.alive = false;
+      console.log(`${player.sessionId} killed!`)
+    }
+  }
 }

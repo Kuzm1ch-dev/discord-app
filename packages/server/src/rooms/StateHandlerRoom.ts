@@ -3,7 +3,7 @@ import {TPlayerOptions} from '../entities/Player';
 import {State, IState} from '../entities/State';
 
 export class StateHandlerRoom extends Room<State> {
-  maxClients = 1000;
+  maxClients = 8;
 
   onCreate(options: IState) {
     this.setState(new State(options));
@@ -31,23 +31,37 @@ export class StateHandlerRoom extends Room<State> {
       this.broadcast("messages", `${ client.id } не готов!`);
     });
 
-    this.onMessage('start', (client, _data) => {
-      console.log("start ", client.sessionId)
-      this.state.start(client.sessionId);
-      this.broadcast("start");
-      this.broadcast("messages", `Игра началась!`);
-    });
-
     this.onMessage("spectate", (client, _data) => {
       console.log("spectate ", client.sessionId)
-      this.state.spectate(client.sessionId);
-      this.broadcast("messages", `${ client.id } теперь спектатор!`);
+      if (this.state.spectate(client.sessionId)){
+        this.broadcast("messages", `${ client.id } теперь спектатор!`);
+      }
     });
 
     this.onMessage("play", (client, _data) => {
       console.log("play ", client.sessionId)
-      this.state.play(client.sessionId);
-      this.broadcast("messages", `${ client.id } в игре!`);
+      if(this.state.play(client.sessionId)){
+        this.broadcast("messages", `${ client.id } в игре!`);
+      }
+    });
+
+    this.onMessage('start', (client, _data) => {
+      console.log("start ", client.sessionId)
+      if (this.state.start(client.sessionId)){
+        this.broadcast("start");
+        this.broadcast("messages", `Игра началась!`);
+        this.turn()
+      }
+    });
+
+    this.onMessage("shot", (client, _data) => {
+      console.log("shot ", client.sessionId)
+      if (this.state.shot()){
+        this.state.kill(_data.targetId)
+        console.log(`${client.sessionId} kill ${_data.targetId}`)
+        this.broadcast("messages", `${_data.targetId} был убит!`)
+      }
+      this.turn()
     });
   }
 
@@ -69,5 +83,17 @@ export class StateHandlerRoom extends Room<State> {
 
   onDispose() {
     console.log('Dispose StateHandlerRoom');
+  }
+
+  turn(){
+    var nextUserId = this.state.next();
+    if (nextUserId !== false && typeof(nextUserId) == "string"){
+      var sessionId = this.state.players.get(nextUserId)?.sessionId;
+      if(sessionId){
+        this.clients.getById(sessionId)?.send("turn");
+      }
+    }else{
+      this.state.newRound()
+    }
   }
 }
