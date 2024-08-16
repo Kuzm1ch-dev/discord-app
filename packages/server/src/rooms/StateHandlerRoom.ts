@@ -32,21 +32,21 @@ export class StateHandlerRoom extends Room<State> {
     });
 
     this.onMessage("spectate", (client, _data) => {
-      console.log("spectate ", client.sessionId)
+      console.log("spectate", client.sessionId)
       if (this.state.spectate(client.sessionId)){
         this.broadcast("messages", `${ client.id } теперь спектатор!`);
       }
     });
 
     this.onMessage("play", (client, _data) => {
-      console.log("play ", client.sessionId)
+      console.log("play", client.sessionId)
       if(this.state.play(client.sessionId)){
         this.broadcast("messages", `${ client.id } в игре!`);
       }
     });
 
     this.onMessage('start', (client, _data) => {
-      console.log("start ", client.sessionId)
+      console.log("start", client.sessionId)
       if (this.state.start(client.sessionId)){
         this.broadcast("start");
         this.broadcast("messages", `Игра началась!`);
@@ -55,7 +55,7 @@ export class StateHandlerRoom extends Room<State> {
     });
 
     this.onMessage("shot", (client, _data) => {
-      console.log("shot ", client.sessionId)
+      console.log("shot", client.sessionId)
       if (this.state.shot()){
         this.state.kill(_data.targetId)
         console.log(`${client.sessionId} kill ${_data.targetId}`)

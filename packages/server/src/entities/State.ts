@@ -171,7 +171,9 @@ export class State extends Schema {
   shot(): boolean {
     var min = 1
     var max = 6
-    return (Math.random() * (max - min) + min) == min;
+    var n = (Math.random() * (max - min) + min);
+    console.log(n);
+    return n == min;
   }
 
   kill( userId: string) {
