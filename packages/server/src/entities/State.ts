@@ -157,10 +157,10 @@ export class State extends Schema {
 
   next(): string | boolean{
     var player = this.queue.next()
-    if (player.done){
+    if (!player.done){
       return player.value;
     }
-    return false
+    return true
   }
 
   newRound(){

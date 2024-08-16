@@ -1,11 +1,11 @@
-export class Queue implements Iterator<String> {
+export class Queue implements Iterator<string> {
     private pointer = 0;
   
     constructor(
-        public players: String[],
+        public players: string[],
     ) {}
   
-    public next(): IteratorResult<String> {
+    public next(): IteratorResult<string> {
         if (this.pointer < this.players.length) {
             return {
                 done: false,
