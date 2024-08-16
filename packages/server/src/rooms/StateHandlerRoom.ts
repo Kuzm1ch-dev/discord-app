@@ -90,6 +90,7 @@ export class StateHandlerRoom extends Room<State> {
     var nextUserId = this.state.next();
     if (nextUserId !== false && typeof(nextUserId) == "string"){
       var sessionId = this.state.players.get(nextUserId)?.sessionId;
+      console.log(`turn ${sessionId}`)
       if(sessionId){
         this.clients.getById(sessionId)?.send("turn");
       }
