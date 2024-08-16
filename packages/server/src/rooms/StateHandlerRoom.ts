@@ -55,6 +55,7 @@ export class StateHandlerRoom extends Room<State> {
     });
 
     this.onMessage("shot", (client, _data) => {
+      console.log(_data);
       console.log(`${client.sessionId} shot to ${_data.targetId}`)
       if (this.state.shot()){
         this.state.kill(_data.targetId)
