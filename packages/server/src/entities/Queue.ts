@@ -9,7 +9,7 @@ export class Queue implements Iterator<string> {
         if (this.pointer < this.players.length) {
             return {
                 done: false,
-                value: this.players[this.pointer],
+                value: this.players[this.pointer++],
             };
         } else {
             return {

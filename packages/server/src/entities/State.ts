@@ -160,7 +160,7 @@ export class State extends Schema {
     if (!player.done){
       return player.value;
     }
-    return true
+    return false
   }
 
   newRound(){
