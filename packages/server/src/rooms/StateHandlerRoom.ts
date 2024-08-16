@@ -92,7 +92,11 @@ export class StateHandlerRoom extends Room<State> {
       var sessionId = this.state.players.get(nextUserId)?.sessionId;
       console.log(`turn ${sessionId}`)
       if(sessionId){
-        this.clients.getById(sessionId)?.send("turn");
+        var client = this.clients.getById(sessionId);
+        if(client){
+          client.send("turn");
+          client.send("messages", "Ваш ход!");
+        }
       }
     }else{
       console.log("New Round!")
