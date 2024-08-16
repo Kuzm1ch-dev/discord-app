@@ -86,6 +86,7 @@ export class StateHandlerRoom extends Room<State> {
   }
 
   turn(){
+    console.log("Turn!")
     var nextUserId = this.state.next();
     if (nextUserId !== false && typeof(nextUserId) == "string"){
       var sessionId = this.state.players.get(nextUserId)?.sessionId;
@@ -93,7 +94,9 @@ export class StateHandlerRoom extends Room<State> {
         this.clients.getById(sessionId)?.send("turn");
       }
     }else{
+      console.log("New Round!")
       this.state.newRound()
+      this.turn()
     }
   }
 }
