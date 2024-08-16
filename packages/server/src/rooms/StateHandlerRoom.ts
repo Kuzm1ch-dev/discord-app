@@ -32,6 +32,7 @@ export class StateHandlerRoom extends Room<State> {
     this.onMessage('start', (client, _data) => {
       console.log("start ", client.sessionId)
       this.state.start(client.sessionId);
+      this.broadcast("start");
     });
 
     this.onMessage("spectate", (client, _data) => {

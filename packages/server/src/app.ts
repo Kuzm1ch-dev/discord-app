@@ -62,5 +62,5 @@ router.post('/token', async (req: Request, res: Response) => {
 app.use('/api', router);
 
 server.listen(port).then(() => {
-  console.log(`App is listening on port ${port} !`);
+  console.log(`Server is listening on port ${port} !`);
 });
