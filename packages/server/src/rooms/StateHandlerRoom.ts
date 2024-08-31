@@ -60,7 +60,16 @@ export class StateHandlerRoom extends Room<State> {
       if (this.state.shot()) {
         this.state.kill(_data.targetId);
         console.log(`${client.sessionId} kill ${_data.targetId}`);
+        this.broadcast("shot", {
+          sessionId: client.sessionId,
+          state: "shot"
+        });
         this.broadcast("messages", `${_data.targetId} был убит!`);
+      }else{
+        this.broadcast("shot", {
+          sessionId: client.sessionId,
+          state: "dry"
+        });
       }
       if (this.state.aliveCount() > 1) {
       }
