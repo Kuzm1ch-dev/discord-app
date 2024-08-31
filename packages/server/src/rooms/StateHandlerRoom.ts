@@ -10,12 +10,10 @@ export class StateHandlerRoom extends Room<State> {
 
     // Here's where we would add handlers for updating state
     this.onMessage("startTalking", (client, _data) => {
-      console.log("startTalking");
       this.state.startTalking(client.sessionId);
     });
 
     this.onMessage("stopTalking", (client, _data) => {
-      console.log("stopTalking");
       this.state.stopTalking(client.sessionId);
     });
 
@@ -84,6 +82,7 @@ export class StateHandlerRoom extends Room<State> {
   onJoin(client: Client, options: TPlayerOptions) {
     console.log("onJoin");
     this.state.createPlayer(client.sessionId, options);
+    console.log(this.state.players);
     this.broadcast("messages", `${client.id} присоединился к игре!`);
   }
 
