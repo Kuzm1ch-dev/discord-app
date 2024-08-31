@@ -60,6 +60,10 @@ export class State extends Schema {
     }
   }
 
+  aliveCount(): number{
+    return Array.from(this.players.values()).filter((p) => p.alive && p.mode == 1).length
+  }
+
   createPlayer(sessionId: string, playerOptions: TPlayerOptions) {
     console.log("createPlayer");
     var master = false;
@@ -170,7 +174,7 @@ export class State extends Schema {
 
   shot(): boolean {
     var min = 1
-    var max = 6
+    var max = 2
     var n = Math.round((Math.random() * (max - min) + min));
     console.log(n);
     return n == min;
