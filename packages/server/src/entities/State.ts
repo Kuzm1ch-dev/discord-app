@@ -142,6 +142,7 @@ export class State extends Schema {
     if (player != null) {
       player.mode = 1;
       if (this.stage > 0) player.alive = false;
+      else player.alive = true;
       player.ready = false;
       return true;
     }
