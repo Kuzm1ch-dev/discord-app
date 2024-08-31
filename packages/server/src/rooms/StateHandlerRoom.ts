@@ -104,8 +104,11 @@ export class StateHandlerRoom extends Room<State> {
       }
     }else{
       console.log("New Round!")
-      this.state.newRound()
-      this.turn()
+      if (this.state.newRound()){
+        this.turn();
+      }else{
+        this.broadcast("messages", `Все мертвы, игра окончена!`);
+      }
     }
   }
 }

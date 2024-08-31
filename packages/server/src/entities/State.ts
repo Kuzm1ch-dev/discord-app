@@ -167,9 +167,13 @@ export class State extends Schema {
     return false
   }
 
-  newRound(){
-    this.round += 1;
-    this.queue = new Queue(Array.from(this.players.keys()).filter((k) => this.players.get(k)?.alive && this.players.get(k)?.mode == 1));
+  newRound(): boolean{
+    if (this.aliveCount() > 0){
+      this.round += 1;
+      this.queue = new Queue(Array.from(this.players.keys()).filter((k) => this.players.get(k)?.alive && this.players.get(k)?.mode == 1));
+      return true;
+    }
+    return false;
   }
 
   shot(): boolean {
