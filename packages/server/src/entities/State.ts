@@ -182,8 +182,6 @@ export class State extends Schema {
 
   kill( userId: string) {
     const player = this.players.get(userId)
-    console.log(this.players);
-    console.log(userId);
     if (player != null) {
       player.alive = false;
       console.log(`${player.sessionId} killed!`)
