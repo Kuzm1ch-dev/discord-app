@@ -97,7 +97,9 @@ export class StateHandlerRoom extends Room<State> {
       if (sessionId) {
         var client = this.clients.getById(sessionId);
         if (client) {
-          client.send("turn");
+          this.broadcast("turn", {
+            sessionId: sessionId,
+          });
           client.send("messages", "Ваш ход!");
         }
       }
