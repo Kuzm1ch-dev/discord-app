@@ -179,7 +179,7 @@ export class State extends Schema {
 
   shot(): boolean {
     var min = 1
-    var max = 2
+    var max = 4
     var n = Math.round((Math.random() * (max - min) + min));
     console.log(n);
     return n == min;
